@@ -27,6 +27,7 @@
 #include <iomanip>
 #include <cmath>
 #include <unordered_set>
+#include <std_msgs/Bool.h>
 
 const int QSZ = 1000;
 
