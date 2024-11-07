@@ -290,7 +290,7 @@ namespace tagslam {
     void TagSlam::finalize(bool optimize) {
         ROS_INFO("All Done");
 
-        ros::Publisher pub = nh.advertise<std_msgs::Bool>("/tagslam/all_done", 10);
+        ros::Publisher pub = nh_.advertise<std_msgs::Bool>("/tagslam/all_done", 10);
         std_msgs::Bool msg;
         msg.data = true;
         pub.publish(msg);
