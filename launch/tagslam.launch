@@ -24,6 +24,7 @@
     <param name="has_compressed_images" value="false"/>
     <param name="playback_rate" value="10.0"/>
     <param name="max_number_of_frames" value="$(arg max_number_of_frames)"/>
+    <param name="exit_when_done" value="true" unless="$(arg run_online)"/>
   </node>
 
 </launch>
