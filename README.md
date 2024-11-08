@@ -1,6 +1,6 @@
 # SLAMDunk! TagSLAM
 
-SLAMDunk! Fork of TagSLAM
+SLAMDunk! fork of TagSLAM
 
 TagSLAM is a ROS-based package for Simultaneous Localization and
 Mapping using AprilTag fiducial markers.
