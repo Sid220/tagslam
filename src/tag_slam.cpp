@@ -291,8 +291,7 @@ namespace tagslam {
         ROS_INFO("All Done");
 
         ros::Publisher pub = nh_.advertise<std_msgs::Header>("/tagslam/all_done", 1);
-//        std_msgs::Bool msg;
-//        msg.data = true;
+
         pub.publish(std_msgs::Header());
 
         doDump(optimize);
