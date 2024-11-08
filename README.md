@@ -1,4 +1,4 @@
-# SLAMDunk! TagSLAM: SLAM with Tags
+# SLAMDunk! TagSLAM
 
 SLAMDunk! Fork of TagSLAM
 
