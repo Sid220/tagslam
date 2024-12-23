@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
         matrix:
-          ros_distro: [humble, jazzy, rolling]
+          ros_distro: [humble, rolling]
     runs-on: ubuntu-latest      
     steps:
       - uses: ros-tooling/setup-ros@v0.7
