@@ -26,13 +26,8 @@ EnhancedPlayer::EnhancedPlayer(
 bool EnhancedPlayer::hasTopics(const std::vector<std::string> & topics)
 {
   bool all_there = true;
-//  const auto pubs = rosbag2_transport::Player::get_publishers();
   for (const auto & topic : topics) {
-     LOG_INFO(topic);
-//    if (pubs.find(topic) == pubs.end()) {
-//      LOG_ERROR("topic " << topic << " is not in bag!");
-//      all_there = false;
-//    }
+    LOG_INFO(topic);
   }
   return (all_there);
 }
@@ -40,15 +35,8 @@ bool EnhancedPlayer::hasTopics(const std::vector<std::string> & topics)
 bool EnhancedPlayer::hasImageTopics(
   const std::vector<std::pair<std::string, std::string>> & topics)
 {
-    bool all_there = true;
-//  const auto pubs = rosbag2_transport::Player::get_publishers();
+  bool all_there = true;
   for (const auto & topic : topics) {
-//    const auto image_topic =
-//      topic.first + (topic.second == "raw" ? "" : "/" + topic.second);
-//    if (pubs.find(image_topic) == pubs.end()) {
-//      LOG_WARN("topic " << image_topic << " is not in bag!");
-//      all_there = false;
-//    }
     LOG_INFO(topic.first);
   }
   return (all_there);
