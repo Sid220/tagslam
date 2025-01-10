@@ -17,51 +17,49 @@
 #include <tagslam/logging.hpp>
 #include <tagslam/yaml.hpp>
 
-namespace tagslam
-{
-using std::string;
-static rclcpp::Logger get_logger() { return (rclcpp::get_logger("camera")); }
+namespace tagslam {
+    using std::string;
 
-CameraPtr Camera::parse_camera(const string & name, const YAML::Node & config)
-{
-  CameraPtr camPtr(new Camera());
-  Camera & cam = *camPtr;  // short hand
-  cam.name_ = name;
-  cam.intrinsics_ = CameraIntrinsics::parse(config);
-  cam.imageTopic_ = yaml::parse<string>(config, "image_topic");
-  if (config["image_transport"]) {
-    cam.imageTransport_ = yaml::parse<string>(config, "image_transport");
-  }
-  cam.tagTopic_ = yaml::parse<string>(config, "tag_topic", "");
-  cam.rigName_ = yaml::parse<string>(config, "rig_body");
-  cam.frameId_ = yaml::parse<string>(config, "frame_id", cam.name_);
-  double wiggleR = yaml::parse<double>(config, "wiggle_rotation", 0.00001);
-  double wiggleT = yaml::parse<double>(config, "wiggle_translation", 0.00001);
-  cam.wiggle_ = PoseNoise::make(wiggleR, wiggleT);
-  return (camPtr);
-}
+    static rclcpp::Logger get_logger() { return (rclcpp::get_logger("camera")); }
 
-CameraVec Camera::parse_cameras(const YAML::Node & config)
-{
-  CameraVec cdv;
-  int cam_idx = 0;
-  for (size_t cam_num = 0; cam_num < 100; cam_num++) {
-    string name = "cam" + std::to_string(cam_num);
-    if (!config[name]) {
-      name = "camera_" + std::to_string(cam_num);
-      if (!config[name]) {
-        continue;
-      }
+    CameraPtr Camera::parse_camera(const string &name, const YAML::Node &config) {
+        CameraPtr camPtr(new Camera());
+        Camera &cam = *camPtr;  // short hand
+        cam.name_ = name;
+        cam.intrinsics_ = CameraIntrinsics::parse(config);
+        cam.imageTopic_ = yaml::parse<string>(config, "image_topic");
+        if (config["image_transport"]) {
+            cam.imageTransport_ = yaml::parse<string>(config, "image_transport");
+        }
+        cam.tagTopic_ = yaml::parse<string>(config, "tag_topic", "");
+        cam.rigName_ = yaml::parse<string>(config, "rig_body");
+        cam.frameId_ = yaml::parse<string>(config, "frame_id", cam.name_);
+        double wiggleR = yaml::parse<double>(config, "wiggle_rotation", 0.00001);
+        double wiggleT = yaml::parse<double>(config, "wiggle_translation", 0.00001);
+        cam.wiggle_ = PoseNoise::make(wiggleR, wiggleT);
+        return (camPtr);
     }
-    try {
-      CameraPtr camera = parse_camera(name, config[name]);
-      camera->index_ = cam_idx++;
-      cdv.push_back(camera);
-    } catch (const std::runtime_error & e) {
-      BOMB_OUT("error reading camera: " << name << " " << e.what());
+
+    CameraVec Camera::parse_cameras(const YAML::Node &config) {
+        CameraVec cdv;
+        int index = 0;
+        for (YAML::const_iterator it = config.begin(); it != config.end(); ++it) {
+            auto key = it->first.as<std::string>();
+            if (key.find("cam") == 0) {
+                std::cout << "Found element: " << key << std::endl;
+                try {
+                    CameraPtr camera = parse_camera(
+                            it->first.as<string>(), config[key]);
+                    camera->index_ = index++;
+                    cdv.push_back(camera);
+                } catch (const std::runtime_error &e) {
+                    BOMB_OUT(
+                            "error reading camera: " << it->first.as<string>() << " "
+                                                     << e.what());
+                }
+            }
+        }
+        return (cdv);
     }
-  }
-  return (cdv);
-}
 
 }  // namespace tagslam
