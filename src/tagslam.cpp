@@ -188,6 +188,7 @@ TagPtr TagSLAM::addTag(int tagId, const std::shared_ptr<Body> & body) const
 
 void TagSLAM::readParams()
 {
+  createOutBagOnDump_ = declare_parameter("create_outbag_on_dump", true);
   outBagName_ = declare_parameter("outbag", "out.bag");
   playbackRate_ = declare_parameter("playback_rate", 5.0);
   outDir_ = declare_parameter("output_directory", ".");
@@ -351,12 +352,14 @@ void TagSLAM::doDump(bool optimize)
   publishTransforms(
     times_.empty() ? 0ULL : (*(times_.rbegin()) + 1000ULL), true);
   tagCornerFile_.flush();
-  openOutputBag(outBagName_);
-  writeToBag_ = true;
-  doReplay(0);  //  0 = playback at full speed
-  writeToBag_ = false;
-  outputBag_->close();
-  outputBag_.reset();
+  if (createOutBagOnDump_) {
+    openOutputBag(outBagName_);
+    writeToBag_ = true;
+    doReplay(0);  //  0 = playback at full speed
+    writeToBag_ = false;
+    outputBag_->close();
+    outputBag_.reset();
+  }
 
   writeCameraPoses(outDir_ + "/camera_poses.yaml");
   writeFullCalibration(outDir_ + "/calibration.yaml");

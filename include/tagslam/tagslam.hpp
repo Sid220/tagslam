@@ -227,6 +227,7 @@ private:
   string outBagName_;
   bool writeToBag_{false};
   bool publishInitialTransforms_{false};
+  bool createOutBagOnDump_{true};
   string optimizerMode_;
   string outDir_;
   string inBagFile_;
